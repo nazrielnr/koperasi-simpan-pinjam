@@ -34,8 +34,7 @@
                         <td class="px-3 py-3 text-xs font-medium text-zinc-600">{{ ucfirst($item->status) }}</td>
                         <td class="px-3 py-3">
                             <div class="flex items-center justify-end gap-3 whitespace-nowrap">
-                                <a href="{{ route('anggota.show', $item) }}" class="text-xs font-medium leading-none text-zinc-600 transition hover:text-zinc-950">Detail</a>
-                                <a href="{{ route('anggota.edit', $item) }}" class="text-xs font-medium leading-none text-zinc-600 transition hover:text-zinc-950">Edit</a>
+                                <button type="button" x-data x-on:click="$dispatch('open-slide-over', 'detail-anggota-{{ $item->id }}')" class="text-xs font-medium leading-none text-zinc-600 transition hover:text-zinc-950">Detail</button>
                                 <form method="POST" action="{{ route('anggota.destroy', $item) }}" onsubmit="return confirm('Hapus data anggota ini?')">
                                     @csrf
                                     @method('DELETE')
@@ -54,6 +53,54 @@
     </div>
 
     <div class="mt-4">{{ $anggotas->links() }}</div>
+
+    @foreach ($anggotas as $item)
+        <x-slide-over name="detail-anggota-{{ $item->id }}">
+            <div class="flex items-start justify-between gap-4 border-b border-zinc-200 px-6 py-5">
+                <div>
+                    <p class="text-xs font-medium uppercase tracking-wide text-zinc-400">Detail Anggota</p>
+                    <h2 class="mt-1 text-lg font-semibold text-zinc-950">{{ $item->nama }}</h2>
+                    <p class="mt-1 text-sm text-zinc-500">{{ $item->nomor_anggota }}</p>
+                </div>
+                <button type="button" x-on:click="show = false" class="rounded-md p-2 text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-700">×</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto px-6 py-5">
+                <dl class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                        <dt class="text-xs font-medium uppercase tracking-wide text-zinc-400">Nomor Anggota</dt>
+                        <dd class="mt-1 text-sm font-medium text-zinc-900">{{ $item->nomor_anggota }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-medium uppercase tracking-wide text-zinc-400">Status</dt>
+                        <dd class="mt-1 text-sm text-zinc-700">{{ ucfirst($item->status) }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-medium uppercase tracking-wide text-zinc-400">NIK</dt>
+                        <dd class="mt-1 text-sm text-zinc-700">{{ $item->nik ?: '-' }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-medium uppercase tracking-wide text-zinc-400">Telepon</dt>
+                        <dd class="mt-1 text-sm text-zinc-700">{{ $item->telepon ?: '-' }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-medium uppercase tracking-wide text-zinc-400">Tanggal Gabung</dt>
+                        <dd class="mt-1 text-sm text-zinc-700">{{ $item->tanggal_gabung?->format('d M Y') ?: '-' }}</dd>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <dt class="text-xs font-medium uppercase tracking-wide text-zinc-400">Alamat</dt>
+                        <dd class="mt-1 text-sm text-zinc-700">{{ $item->alamat ?: '-' }}</dd>
+                    </div>
+                </dl>
+            </div>
+
+            <div class="flex justify-end gap-3 border-t border-zinc-200 px-6 py-4">
+                <button type="button" x-on:click="show = false" class="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50">Tutup</button>
+                <button type="button" x-on:click="show = false; $dispatch('open-modal', 'edit-anggota-{{ $item->id }}')" class="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800">Edit</button>
+            </div>
+        </x-slide-over>
+    @endforeach
+
     @include('components.create-modals', ['showAnggota' => true])
     @include('components.edit-modals', ['editAnggotas' => $anggotas])
 </x-app-layout>

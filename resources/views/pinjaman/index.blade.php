@@ -37,8 +37,7 @@
                         <td class="px-3 py-3 text-xs font-medium text-zinc-600">{{ ucfirst($item->status) }}</td>
                         <td class="px-3 py-3">
                             <div class="flex items-center justify-end gap-3 whitespace-nowrap">
-                                <a href="{{ route('pinjaman.show', $item) }}" class="text-xs font-medium leading-none text-zinc-600 transition hover:text-zinc-950">Detail</a>
-                                <a href="{{ route('pinjaman.edit', $item) }}" class="text-xs font-medium leading-none text-zinc-600 transition hover:text-zinc-950">Edit</a>
+                                <button type="button" x-data x-on:click="$dispatch('open-slide-over', 'detail-pinjaman-{{ $item->id }}')" class="text-xs font-medium leading-none text-zinc-600 transition hover:text-zinc-950">Detail</button>
                                 <form method="POST" action="{{ route('pinjaman.destroy', $item) }}" onsubmit="return confirm('Hapus data pinjaman ini?')">
                                     @csrf
                                     @method('DELETE')
@@ -57,6 +56,66 @@
     </div>
 
     <div class="mt-4">{{ $pinjamans->links() }}</div>
+
+    @foreach ($pinjamans as $item)
+        <x-slide-over name="detail-pinjaman-{{ $item->id }}">
+            <div class="flex items-start justify-between gap-4 border-b border-zinc-200 px-6 py-5">
+                <div>
+                    <p class="text-xs font-medium uppercase tracking-wide text-zinc-400">Detail Pinjaman</p>
+                    <h2 class="mt-1 text-lg font-semibold text-zinc-950">{{ $item->nomor_pinjaman }}</h2>
+                    <p class="mt-1 text-sm text-zinc-500">{{ $item->anggota?->nama ?: '-' }} · {{ ucfirst($item->status) }}</p>
+                </div>
+                <button type="button" x-on:click="show = false" class="rounded-md p-2 text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-700">×</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto px-6 py-5">
+                <dl class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                        <dt class="text-xs font-medium uppercase tracking-wide text-zinc-400">Anggota</dt>
+                        <dd class="mt-1 text-sm font-medium text-zinc-900">{{ $item->anggota?->nama ?: '-' }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-medium uppercase tracking-wide text-zinc-400">Status</dt>
+                        <dd class="mt-1 text-sm text-zinc-700">{{ ucfirst($item->status) }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-medium uppercase tracking-wide text-zinc-400">Plafon</dt>
+                        <dd class="mt-1 text-sm font-medium text-zinc-900">Rp {{ number_format($item->jumlah_pokok, 0, ',', '.') }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-medium uppercase tracking-wide text-zinc-400">Sisa Pokok</dt>
+                        <dd class="mt-1 text-sm text-zinc-700">Rp {{ number_format(max(0, $item->jumlah_pokok - ($item->pokok_terbayar ?? 0)), 0, ',', '.') }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-medium uppercase tracking-wide text-zinc-400">Bunga</dt>
+                        <dd class="mt-1 text-sm text-zinc-700">{{ $item->bunga_persen }}%</dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-medium uppercase tracking-wide text-zinc-400">Tenor</dt>
+                        <dd class="mt-1 text-sm text-zinc-700">{{ $item->tenor_bulan }} bulan</dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-medium uppercase tracking-wide text-zinc-400">Tanggal Cair</dt>
+                        <dd class="mt-1 text-sm text-zinc-700">{{ $item->tanggal_cair?->format('d M Y') ?: '-' }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-medium uppercase tracking-wide text-zinc-400">Jatuh Tempo</dt>
+                        <dd class="mt-1 text-sm text-zinc-700">{{ $item->jatuh_tempo?->format('d M Y') ?: '-' }}</dd>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <dt class="text-xs font-medium uppercase tracking-wide text-zinc-400">Keterangan</dt>
+                        <dd class="mt-1 text-sm text-zinc-700">{{ $item->keterangan ?: '-' }}</dd>
+                    </div>
+                </dl>
+            </div>
+
+            <div class="flex justify-end gap-3 border-t border-zinc-200 px-6 py-4">
+                <button type="button" x-on:click="show = false" class="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50">Tutup</button>
+                <button type="button" x-on:click="show = false; $dispatch('open-modal', 'edit-pinjaman-{{ $item->id }}')" class="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800">Edit</button>
+            </div>
+        </x-slide-over>
+    @endforeach
+
     @include('components.create-modals', ['showPinjaman' => true, 'anggotaOptions' => $anggotaOptions])
     @include('components.edit-modals', ['editPinjamans' => $pinjamans, 'anggotaOptions' => $anggotaOptions])
 </x-app-layout>
