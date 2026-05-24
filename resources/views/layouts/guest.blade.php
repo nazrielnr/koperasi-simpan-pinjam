@@ -15,18 +15,10 @@
     <body class="font-sans text-slate-900 antialiased">
         <div class="flex min-h-screen flex-col items-center justify-center bg-[linear-gradient(to_bottom,_#f8fafc,_#eef2ff)] px-4 py-8 sm:px-6 lg:px-8">
             <div class="w-full max-w-md">
-                <div class="mb-6 flex items-center gap-3">
-                    <div class="grid h-12 w-12 place-items-center rounded-2xl bg-slate-900 text-sm font-semibold text-white shadow-sm">SP</div>
-                    <div>
-                        <div class="text-lg font-semibold text-slate-900">{{ config('app.name', 'Simpan Pinjam') }}</div>
-                        <div class="text-sm text-slate-500">Akses akun</div>
-                    </div>
-                </div>
-
                 <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-200/60">
                     <div class="border-b border-slate-200 px-6 py-5">
-                        <h1 class="text-lg font-semibold text-slate-900">Masuk ke sistem</h1>
-                        <p class="mt-1 text-sm text-slate-500">Kelola data koperasi dalam dashboard yang lebih bersih.</p>
+                        <h1 class="text-lg font-semibold text-slate-900">{{ config('app.name', 'Simpan Pinjam') }}</h1>
+                        <p class="mt-1 text-sm text-slate-500">Akses akun</p>
                     </div>
 
                     <div class="p-6 sm:p-8">
