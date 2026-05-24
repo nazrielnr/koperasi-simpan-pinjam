@@ -33,13 +33,13 @@
                         <td class="px-3 py-3 font-medium text-zinc-900">Rp {{ number_format($item->jumlah_bayar, 0, ',', '.') }}</td>
                         <td class="px-3 py-3 text-xs font-medium text-zinc-600">{{ ucfirst($item->status) }}</td>
                         <td class="px-3 py-3">
-                            <div class="flex justify-end gap-3">
-                                <a href="{{ route('angsuran.show', $item) }}" class="text-xs font-medium text-zinc-600 transition hover:text-zinc-950">Detail</a>
-                                <a href="{{ route('angsuran.edit', $item) }}" class="text-xs font-medium text-zinc-600 transition hover:text-zinc-950">Edit</a>
+                            <div class="flex items-center justify-end gap-3 whitespace-nowrap">
+                                <a href="{{ route('angsuran.show', $item) }}" class="text-xs font-medium leading-none text-zinc-600 transition hover:text-zinc-950">Detail</a>
+                                <a href="{{ route('angsuran.edit', $item) }}" class="text-xs font-medium leading-none text-zinc-600 transition hover:text-zinc-950">Edit</a>
                                 <form method="POST" action="{{ route('angsuran.destroy', $item) }}" onsubmit="return confirm('Hapus data angsuran ini?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="text-xs font-medium text-red-500 transition hover:text-red-700">Hapus</button>
+                                    <button type="submit" class="text-xs font-medium leading-none text-red-500 transition hover:text-red-700">Hapus</button>
                                 </form>
                             </div>
                         </td>
