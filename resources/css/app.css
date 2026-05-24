@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html {
+        @apply bg-zinc-50 text-zinc-900 antialiased;
+        color-scheme: light;
+        font-variant-numeric: tabular-nums;
+    }
+
+    body {
+        @apply bg-zinc-50 text-zinc-900 antialiased;
+    }
+
+    h1,
+    h2,
+    h3 {
+        text-wrap: balance;
+    }
+}
+
+[x-cloak] {
+    display: none !important;
+}
